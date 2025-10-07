@@ -2,28 +2,36 @@
 Here are my labs for database course
 # Лабораторна робота 1
 
-## 1. Вимоги для бд (use кейси)
+## 1. Вимоги для системи
 
-### Клієнт (читач):
-- Реєструється у бібліотеці, вказуючи ім’я та телефон.
-- Переглядає доступні книги (за назвою, жанром, автором).
-- Бере книгу (якщо ліміт < 5 і книга вільна).
-- Повертає книгу, після чого вона знову стає доступною.
-- Переглядає історію своїх видач.
+### Вимоги до функціональності для клієнта (читача)
 
-### Бібліотекар:
-- Реєструє нового клієнта.
-- Видає книгу клієнту (з перевіркою ліміту та статусу книги).
-- Приймає повернення книги, відмічаючи дату повернення.
-- Переглядає список прострочених книг.
-- Редагує дані клієнта (наприклад, телефон).
-- Видаляє книгу, якщо вона не видана жодному клієнту.
-- Формує звіти (найактивніші клієнти, найпопулярніші книги).
+1. Система повинна надавати можливість реєстрації клієнта з обов’язковим зазначенням імені та номера телефону.  
+2. Система повинна забезпечувати перегляд каталогу доступних книг з можливістю фільтрації за назвою, жанром або автором.  
+3. Система повинна дозволяти клієнту брати книгу, якщо кількість одночасно взятих ним книг менше 5 і обрана книга доступна.  
+4. Система повинна забезпечувати можливість повернення книги клієнтом, після чого книга має знову ставати доступною для видачі.  
+5. Система повинна надавати клієнту можливість перегляду історії власних видач книг.
 
-### Адміністрація:
-- Переглядає всі дані (клієнти, книги, автори, жанри, історія).
-- Контролює дотримання правил (ліміт книг, строки повернення).
-- Отримує узагальнені звіти (аналітика по бібліотеці).
+---
+
+### Вимоги до функціональності для бібліотекаря
+
+1. Система повинна забезпечувати можливість реєстрації нового клієнта.  
+2. Система повинна дозволяти видачу книги клієнту з автоматичною перевіркою ліміту взятих книг та статусу доступності книги.  
+3. Система повинна надавати можливість приймати повернення книги та фіксувати дату її повернення.  
+4. Система повинна дозволяти перегляд списку книг, строк повернення яких минув.  
+5. Система повинна забезпечувати можливість редагування даних клієнта (наприклад, зміни номера телефону).  
+6. Система повинна дозволяти видалення книги лише у випадку, якщо вона не перебуває на видачі в жодного клієнта.  
+7. Система повинна надавати функціонал формування звітів, включаючи списки найактивніших клієнтів та найпопулярніших книг.
+
+---
+
+### Вимоги до функціональності для адміністрації
+
+1. Система повинна надавати доступ до всіх даних бібліотеки, включно з клієнтами, книгами, авторами, жанрами та історією видач.  
+2. Система повинна здійснювати контроль за дотриманням правил користування бібліотекою, зокрема за лімітом книг та строками повернення.  
+3. Система повинна надавати адміністрації можливість отримувати узагальнені аналітичні звіти про роботу бібліотеки.
+
 
 ---
 
@@ -31,27 +39,30 @@ Here are my labs for database course
 
 ### 2.1 Сутності та їх атрибути
 
-**Читач (Client)**
-- ID
-- Ім’я (full_name)
+**Клієнт (Client)**
+- ID (client_id)
+- Ім’я (name)
+- Прізвище (surname)
 - Телефон (phone_number)
 
 **Книга (Book)**
-- ID
+- ID (book_id)
 - Назва (title)
 - Мова (language)
 - Видавництво (publisher)
 
 **Автор (Author)**
-- ID
-- Ім’я (full_name)
+- ID (author_id)
+- Ім’я (name)
+- Прізвище (surname)
+- Країна (country)
 
 **Жанр (Genre)**
-- ID
+- ID (genre_id)
 - Назва (name)
 
 **Видачі книг (Checkout)**
-- ID
+- ID (checkout_id)
 - Клієнт (client_id)
 - Книга (book_id)
 - Дата видачі (date_taken)
@@ -65,27 +76,30 @@ Here are my labs for database course
 
 ---
 
-### 2.2 Таблиці з описом ключів та атрибутів
+### 2.2 Таблиці з описом ключів та основних атрибутів
 
 **Client (Читач)**
 - client_id — первинний ключ (PK)
-- full_name — ім’я, не null
-- phone_number — унікальний, не null (перевірка, бо важливо щоб дві людини не мали в базі один і той самий номер)
+- name — ім’я, не null
+- surname — прізвище, не null
+- phone_number — унікальний, не null (щоб дві людини не мали один і той самий номер)
 
 **Book (Книга)**
 - book_id — первинний ключ (PK)
-- title — назва книги, не unique (бо може бути декілька екземплярів однієї книги, але в базі ми зможемо їх вирізняти за id)
+- title — назва книги, не unique (може бути декілька екземплярів однієї книги, різні id)
 - language — мова, не null (ENUM Language)
 - publisher — видавництво, не null
 
 **Author (Автор)**
 - author_id — первинний ключ (PK)
-- full_name — ім’я, не null
+- name — ім’я, не null
+- surname — прізвище, може бути null (у випадку якщо псевдонім автора з одного слова)
+- country — країна, не null
 
 **Genre (Жанр)**
 - genre_id — первинний ключ (PK)
 - name — назва, унікальна, не null
-- Окрема таблиця для нормалізації даних, також це дає книзі важливу змогу мати декілька жанрів одночасно
+- Окрема таблиця для нормалізації даних і щоб книга могла мати декілька жанрів одночасно
 
 **Genre_Book**
 - book_id, genre_id — складений первинний ключ (PK)
@@ -96,12 +110,12 @@ Here are my labs for database course
 - Зовнішні ключі: book_id → Book, author_id → Author
 
 **Checkout (Видачі книг)**
-- checkout_id — первинний ключ (PK, є окремим, а не складеним, бо якщо людина бере якусь книгу вдруге, то у ключі клієнт і книга вже не будуть унікальними)
+- checkout_id — первинний ключ (PK)
 - client_id — зовнішній ключ → Client
 - book_id — зовнішній ключ → Book
 - date_taken — дата видачі, не null
 - deadline — кінцевий строк повернення, не null
-- date_returned — дата фактичного повернення
+- date_returned — дата фактичного повернення - може бути null поки книгу не повернуто
 
 **Language (Мови)**
 - ENUM: English, Ukrainian, French
@@ -128,7 +142,8 @@ Here are my labs for database course
 - Якщо в бібліотеці наявні декілька екземплярів однієї книги, вони будуть унікальні і розрізнятися за ідентифікатором
 - Бібліотека невелика, мова книг обмежується наперед визначеним списком (English, Ukrainian, French), але за потреби перелік можна розширити
 
-<img width="1280" height="428" alt="image" src="https://github.com/user-attachments/assets/471da825-1bfc-43bd-9968-58d425ecc91c" />
+![CrowDiagram](https://github.com/user-attachments/assets/46491d63-bb15-4008-9f5d-3e7ddb8e039c)
+
 
 
 ---
@@ -137,136 +152,62 @@ Here are my labs for database course
 
 ## SQL скрипти
 ```sql
-CREATE TYPE "Language" AS ENUM (
-  'English',
-  'Ukrainian',
-  'French'
+CREATE TYPE Language AS ENUM ('English', 'Ukrainian', 'French');
+
+CREATE TABLE client (
+    client_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    surname VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL UNIQUE
 );
 
-CREATE TABLE "client" (
-  "client_id" integer PRIMARY KEY,
-  "full_name" varchar NOT NULL,
-  "phone_number" varchar UNIQUE NOT NULL
+CREATE TABLE book (
+    book_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    language Language NOT NULL,
+    publisher VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE "checkout" (
-  "checkout_id" integer PRIMARY KEY,
-  "client_id" integer,
-  "book_id" integer,
-  "date_taken" date NOT NULL,
-  "deadline" date NOT NULL,
-  "date_returned" date
+CREATE TABLE author (
+    author_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    surname VARCHAR(255),
+    country VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE "book" (
-  "book_id" integer PRIMARY KEY,
-  "title" varchar NOT NULL,
-  "language" "Language" NOT NULL,
-  "publisher" varchar NOT NULL
+CREATE TABLE genre (
+    genre_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE
 );
 
-CREATE TABLE "author" (
-  "author_id" integer PRIMARY KEY,
-  "full_name" varchar NOT NULL
+CREATE TABLE genre_book (
+    book_id INTEGER NOT NULL,
+    genre_id INTEGER NOT NULL,
+    PRIMARY KEY (book_id, genre_id),
+    FOREIGN KEY (book_id) REFERENCES book(book_id) ON DELETE CASCADE,
+    FOREIGN KEY (genre_id) REFERENCES genre(genre_id) ON DELETE CASCADE
 );
 
-CREATE TABLE "genre" (
-  "genre_id" integer PRIMARY KEY,
-  "name" varchar UNIQUE NOT NULL
+CREATE TABLE author_book (
+    book_id INTEGER NOT NULL,
+    author_id INTEGER NOT NULL,
+    PRIMARY KEY (book_id, author_id),
+    FOREIGN KEY (book_id) REFERENCES book(book_id) ON DELETE CASCADE,
+    FOREIGN KEY (author_id) REFERENCES author(author_id) ON DELETE CASCADE
 );
 
-CREATE TABLE "genre_book" (
-  "book_id" integer,
-  "genre_id" integer,
-  PRIMARY KEY ("book_id", "genre_id")
+CREATE TABLE checkout (
+    checkout_id SERIAL PRIMARY KEY,
+    client_id INTEGER NOT NULL,
+    book_id INTEGER NOT NULL,
+    date_taken DATE NOT NULL,
+    deadline DATE NOT NULL,
+    date_returned DATE,
+    FOREIGN KEY (client_id) REFERENCES client(client_id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES book(book_id) ON DELETE CASCADE
 );
-
-CREATE TABLE "author_book" (
-  "book_id" integer,
-  "author_id" integer,
-  PRIMARY KEY ("book_id", "author_id")
-);
-
-ALTER TABLE "checkout" ADD FOREIGN KEY ("client_id") REFERENCES "client" ("client_id");
-
-ALTER TABLE "checkout" ADD FOREIGN KEY ("book_id") REFERENCES "book" ("book_id");
-
-ALTER TABLE "genre_book" ADD FOREIGN KEY ("book_id") REFERENCES "book" ("book_id");
-
-ALTER TABLE "genre_book" ADD FOREIGN KEY ("genre_id") REFERENCES "genre" ("genre_id");
-
-ALTER TABLE "author_book" ADD FOREIGN KEY ("book_id") REFERENCES "book" ("book_id");
-
-ALTER TABLE "author_book" ADD FOREIGN KEY ("author_id") REFERENCES "author" ("author_id");
 ```
-
-2. Таблиці з описом ключів та атрибутів
-
-Client (Читач)
-
-client_id — первинний ключ (PK)
-
-full_name — ім’я, не null
-
-phone_number — унікальний, не null (перевірка, бо важливо щоб дві людини не мали в базі один і той самий номер)
-
-Book (Книга)
-
-book_id — первинний ключ (PK)
-
-title — назва книги, не unique (бо може бути декілька екземплярів однієї книги, але в базі ми зможемо їх вирізняти за id)
-
-language — мова, не null (ENUM Language)
-
-publisher — видавництво, не null
-
-Author (Автор)
-
-author_id — первинний ключ (PK)
-
-full_name — ім’я, не null
-
-Genre (Жанр)
-
-genre_id — первинний ключ (PK)
-
-name — назва, унікальна, не null
-
-Окрема таблиця для нормалізації даних, також це дає книзі важливу змогу мати декілька жанрів одночасно
-
-Genre_Book
-
-book_id, genre_id — складений первинний ключ (PK)
-
-Зовнішні ключі: book_id → Book, genre_id → Genre
-
-Author_Book
-
-book_id, author_id — складений первинний ключ (PK)
-
-Зовнішні ключі: book_id → Book, author_id → Author
-
-Checkout (Видачі книг)
-
-checkout_id — первинний ключ (PK, є окремим, а не складеним, бо якщо людина бере якусь книгу вдруге, то у ключі клієнт і книга вже не будуть унікальними)
-
-client_id — зовнішній ключ → Client
-
-book_id — зовнішній ключ → Book
-
-date_taken — дата видачі, не null
-
-deadline — кінцевий строк повернення, не null
-
-date_returned — дата фактичного повернення
-
-Language (Мови)
-
-ENUM: English, Ukrainian, French
-
-Я зробив ENUM, бо список дуже короткий і з ймовірністю майже 100% ніколи не буде змінюватися
-
-3. Скріншоти результатів запиту (більше у queries.sql)
+2. Скріншоти результатів запиту (більше у queries.sql)
 <img width="684" height="397" alt="image_2025-09-22_19-19-35" src="https://github.com/user-attachments/assets/8838c395-2e4b-4ee0-aeb4-91374b9d633f" />
 <img width="475" height="397" alt="image_2025-09-22_19-19-59" src="https://github.com/user-attachments/assets/6ee9b646-bcdc-4c9b-accf-ea55f592fdcb" />
 <img width="474" height="420" alt="image_2025-09-22_19-20-15" src="https://github.com/user-attachments/assets/3b039b6d-61a5-4661-9b28-d13b1b0f1892" />
