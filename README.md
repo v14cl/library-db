@@ -39,29 +39,29 @@ Here are my labs for database course
 
 ### 2.1 Сутності та їх атрибути
 
-**Клієнт (Client)**
+**Client**
 - ID (client_id)
 - Ім’я (name)
 - Прізвище (surname)
 - Телефон (phone_number)
 
-**Книга (Book)**
+**Book**
 - ID (book_id)
 - Назва (title)
 - Мова (language)
 - Видавництво (publisher)
 
-**Автор (Author)**
+**Author**
 - ID (author_id)
 - Ім’я (name)
 - Прізвище (surname)
 - Країна (country)
 
-**Жанр (Genre)**
+**Genre**
 - ID (genre_id)
 - Назва (name)
 
-**Видачі книг (Checkout)**
+**Checkout (Видачі книг)**
 - ID (checkout_id)
 - Клієнт (client_id)
 - Книга (book_id)
@@ -69,7 +69,7 @@ Here are my labs for database course
 - Кінцевий строк повернення (deadline)
 - Дата фактичного повернення (date_returned)
 
-**Мови (Language)**
+**Language**
 - English
 - Ukrainian
 - French
@@ -78,25 +78,25 @@ Here are my labs for database course
 
 ### 2.2 Таблиці з описом ключів та основних атрибутів
 
-**Client (Читач)**
+**Client**
 - client_id — первинний ключ (PK)
 - name — ім’я, не null
 - surname — прізвище, не null
 - phone_number — унікальний, не null (щоб дві людини не мали один і той самий номер)
 
-**Book (Книга)**
+**Book**
 - book_id — первинний ключ (PK)
 - title — назва книги, не unique (може бути декілька екземплярів однієї книги, різні id)
 - language — мова, не null (ENUM Language)
 - publisher — видавництво, не null
 
-**Author (Автор)**
+**Author**
 - author_id — первинний ключ (PK)
 - name — ім’я, не null
 - surname — прізвище, може бути null (у випадку якщо псевдонім автора з одного слова)
 - country — країна, не null
 
-**Genre (Жанр)**
+**Genre**
 - genre_id — первинний ключ (PK)
 - name — назва, унікальна, не null
 - Окрема таблиця для нормалізації даних і щоб книга могла мати декілька жанрів одночасно
@@ -117,7 +117,7 @@ Here are my labs for database course
 - deadline — кінцевий строк повернення, не null
 - date_returned — дата фактичного повернення - може бути null поки книгу не повернуто
 
-**Language (Мови)**
+**Language**
 - ENUM: English, Ukrainian, French
 - Я зробив ENUM, бо список дуже короткий і з ймовірністю майже 100% ніколи не буде змінюватися
 
@@ -135,7 +135,7 @@ Here are my labs for database course
 - Кожна книга може бути видана тільки одному клієнту одночасно.
 - Тривалість користування книгою — 30 днів з дати видачі
 - Якщо книга не повернена до дедлайну → вважається простроченою.
-- Телефон клієнта має бути унікальним і відповідати формату (наприклад, +380xxxxxxxxx).
+- Телефон клієнта має бути унікальним і відповідати формату.
 - Неможливо видалити книгу, яка знаходиться у клієнта на руках.
 - У кожної книги має бути хоча б один автор та хоча б один жанр.
 - Усі операції з клієнтами, книгами та видачами фіксуються для історії.
