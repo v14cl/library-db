@@ -188,8 +188,9 @@ CREATE TABLE checkout (
   deadline DATE NOT NULL,
   date_returned DATE
 );
-```
+
 CREATE TYPE language AS ENUM ('English', 'Ukrainian', 'French');
+```
 ---
 Було:
 ![CrowDiagram](https://github.com/user-attachments/assets/46491d63-bb15-4008-9f5d-3e7ddb8e039c)
